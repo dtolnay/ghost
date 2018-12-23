@@ -10,7 +10,7 @@ Rust.
 
 ```toml
 [dependencies]
-ghost = "0.0"
+ghost = "0.1"
 ```
 
 *Supports rustc 1.31+*
