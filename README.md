@@ -156,7 +156,8 @@ impl<T: ?Sized> MyPhantom<T> {
 
 If you aren't adding methods or don't need methods to be rendered in the
 documentation, the recommended idiom is as follows. Rustdoc will show a much
-less distracting type signature but also won't show methods or trait impls.
+less distracting type signature and all of your trait impls, but will not show
+inherent methods.
 
 ```rust
 mod private {
