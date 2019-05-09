@@ -2,7 +2,7 @@
 name = "ghost"
 version = "0.1.0"
 authors = ["David Tolnay <dtolnay@gmail.com>"]
-license = "MIT/Apache-2.0"
+license = "MIT OR Apache-2.0"
 description = "Define your own PhantomData"
 repository = "https://github.com/dtolnay/ghost"
 documentation = "https://docs.rs/ghost"
