@@ -31,10 +31,10 @@ pub fn apply(param: &mut HasVarianceAttribute, base: TokenStream) -> TokenStream
     *attrs = attrs
         .drain(..)
         .filter(|attr| {
-            if attr.path.is_ident("contra") && attr.tts.is_empty() {
+            if attr.path.is_ident("contra") && attr.tokens.is_empty() {
                 variance = Variance::Contravariant;
                 false
-            } else if attr.path.is_ident("invariant") && attr.tts.is_empty() {
+            } else if attr.path.is_ident("invariant") && attr.tokens.is_empty() {
                 variance = Variance::Invariant;
                 false
             } else {

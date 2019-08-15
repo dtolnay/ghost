@@ -66,7 +66,7 @@ pub fn expand<'a>(
 
     for attr in attrs {
         if attr.path.is_ident("derive") {
-            let list = DeriveList::parse.parse2(attr.tts.clone())?;
+            let list = DeriveList::parse.parse2(attr.tokens.clone())?;
             for derive in list.derives {
                 expanded.extend(apply(derive, input));
             }

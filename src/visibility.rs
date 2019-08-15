@@ -1,4 +1,3 @@
-use quote::quote;
 use syn::{parse_quote, Visibility};
 
 // If `vis` describes a visibility relative to some module scope, returns the
