@@ -24,7 +24,7 @@ impl HasVarianceAttribute for LifetimeDef {
     }
 }
 
-pub fn apply(param: &mut HasVarianceAttribute, base: TokenStream) -> TokenStream {
+pub fn apply(param: &mut dyn HasVarianceAttribute, base: TokenStream) -> TokenStream {
     let mut variance = Variance::Covariant;
 
     let attrs = param.attrs();
