@@ -1,6 +1,6 @@
 ## Define your own PhantomData
 
-[![Build Status](https://api.travis-ci.org/dtolnay/ghost.svg?branch=master)](https://travis-ci.org/dtolnay/ghost)
+[![Build Status](https://img.shields.io/github/workflow/status/dtolnay/ghost/CI/master)](https://github.com/dtolnay/ghost/actions?query=branch%3Amaster)
 [![Latest Version](https://img.shields.io/crates/v/ghost.svg)](https://crates.io/crates/ghost)
 [![Rust Documentation](https://img.shields.io/badge/api-rustdoc-blue.svg)](https://docs.rs/ghost)
 
