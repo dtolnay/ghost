@@ -214,7 +214,11 @@
 //! # }
 //! ```
 
-#![allow(clippy::needless_doctest_main)]
+#![allow(
+    clippy::doc_markdown,
+    clippy::needless_doctest_main,
+    clippy::needless_pass_by_value
+)]
 
 extern crate proc_macro;
 
