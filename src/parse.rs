@@ -23,11 +23,11 @@ impl Parse for UnitStruct {
         input.parse::<Token![;]>()?;
 
         Ok(UnitStruct {
-            attrs: attrs,
-            vis: vis,
-            ident: ident,
+            attrs,
+            vis,
+            ident,
             generics: Generics {
-                where_clause: where_clause,
+                where_clause,
                 ..generics
             },
         })
