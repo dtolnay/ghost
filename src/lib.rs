@@ -216,6 +216,8 @@
 
 #![allow(
     clippy::doc_markdown,
+    // https://github.com/rust-lang/rust-clippy/issues/8538
+    clippy::iter_with_drain,
     clippy::needless_doctest_main,
     clippy::needless_pass_by_value
 )]
