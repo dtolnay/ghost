@@ -224,7 +224,6 @@
 
 extern crate proc_macro;
 
-mod args;
 mod derive;
 mod parse;
 mod variance;
@@ -233,9 +232,9 @@ mod visibility;
 use proc_macro::TokenStream;
 use proc_macro2::{Ident, Span};
 use quote::quote;
+use syn::parse::Nothing;
 use syn::{parse_macro_input, Error, GenericParam};
 
-use crate::args::Nothing;
 use crate::parse::UnitStruct;
 
 /// Define your own PhantomData and similarly behaved unit types.
