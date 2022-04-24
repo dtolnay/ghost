@@ -18,8 +18,7 @@ mod first {
     impl<T> Trait for MyPhantom<T> {}
 
     // Proof that MyPhantom is local to the current crate.
-    impl<T> MyPhantom<T> {
-    }
+    impl<T> MyPhantom<T> {}
 }
 
 mod second {
@@ -27,7 +26,9 @@ mod second {
 
     #[phantom]
     #[derive(Copy, Clone, Default, Hash, PartialOrd, Ord, PartialEq, Eq, Debug)]
-    struct Crazy<'a, V: 'a, T> where &'a V: IntoIterator<Item = T>;
+    struct Crazy<'a, V: 'a, T>
+    where
+        &'a V: IntoIterator<Item = T>;
 
     #[test]
     fn test() {
