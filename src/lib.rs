@@ -233,7 +233,7 @@ use proc_macro::TokenStream;
 use proc_macro2::{Ident, Span};
 use quote::quote;
 use syn::parse::Nothing;
-use syn::{parse_macro_input, Error, GenericParam};
+use syn::{parse_macro_input, Error, GenericParam, Token};
 
 use crate::parse::UnitStruct;
 
@@ -289,6 +289,7 @@ pub fn phantom(args: TokenStream, input: TokenStream) -> TokenStream {
     }
     let impl_generics = &impl_generics;
     let ty_generics = &ty_generics;
+    let enum_token = Token![enum](input.struct_token.span);
 
     TokenStream::from(quote! {
         mod #void_namespace {
@@ -323,7 +324,7 @@ pub fn phantom(args: TokenStream, input: TokenStream) -> TokenStream {
         }
 
         #(#attrs)*
-        #vis enum #ident #generics #where_clause {
+        #vis #enum_token #ident #generics #where_clause {
             __Phantom(#void_namespace::#ident <#(#ty_generics),*>),
             #ident,
         }
