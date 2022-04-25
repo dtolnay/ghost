@@ -254,6 +254,7 @@ pub fn phantom(args: TokenStream, input: TokenStream) -> TokenStream {
                 }
             }
 
+            #[allow(non_camel_case_types)]
             #vis_super struct #ident <#(#impl_generics),*> (
                 #(
                     core::marker::PhantomData<#phantoms>,
