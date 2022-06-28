@@ -107,6 +107,7 @@ fn expand_clone(input: &UnitStruct) -> TokenStream {
     let (impl_generics, ty_generics, where_clause) = input.generics.split_for_impl();
 
     quote! {
+        #[allow(clippy::expl_impl_clone_on_copy)]
         impl #impl_generics ::core::clone::Clone
         for #ident #ty_generics #where_clause {
             #[inline]
