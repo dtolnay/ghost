@@ -170,7 +170,8 @@
     // https://github.com/rust-lang/rust-clippy/issues/8538
     clippy::iter_with_drain,
     clippy::needless_doctest_main,
-    clippy::needless_pass_by_value
+    clippy::needless_pass_by_value,
+    clippy::too_many_lines
 )]
 
 extern crate proc_macro;
