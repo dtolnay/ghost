@@ -220,7 +220,7 @@ pub fn phantom(args: TokenStream, input: TokenStream) -> TokenStream {
             GenericParam::Type(param) => {
                 let ident = &param.ident;
                 let elem = quote!(#ident);
-                impl_generics.push(quote!(#ident: ?Sized));
+                impl_generics.push(quote!(#ident: ?core::marker::Sized));
                 ty_generics.push(quote!(#ident));
                 phantoms.push(variance::apply(param, elem));
             }
