@@ -238,6 +238,12 @@ pub fn phantom(args: TokenStream, input: TokenStream) -> TokenStream {
             }
         }
     }
+
+    let void = Ident::new(
+        if ident == "Void" { "__Void" } else { "Void" },
+        Span::call_site(),
+    );
+
     let impl_generics = &impl_generics;
     let ty_generics = &ty_generics;
     let enum_token = Token![enum](input.struct_token.span);
@@ -246,9 +252,9 @@ pub fn phantom(args: TokenStream, input: TokenStream) -> TokenStream {
     TokenStream::from(quote! {
         #[cfg(not(doc))]
         mod #void_namespace {
-            enum __Void {}
-            impl core::marker::Copy for __Void {}
-            impl core::clone::Clone for __Void {
+            enum #void {}
+            impl core::marker::Copy for #void {}
+            impl core::clone::Clone for #void {
                 fn clone(&self) -> Self {
                     match *self {}
                 }
@@ -259,7 +265,7 @@ pub fn phantom(args: TokenStream, input: TokenStream) -> TokenStream {
                 #(
                     core::marker::PhantomData<#phantoms>,
                 )*
-                __Void,
+                self::#void,
             );
 
             impl <#(#impl_generics),*> core::marker::Copy
