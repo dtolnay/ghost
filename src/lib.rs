@@ -220,7 +220,7 @@ pub fn phantom(args: TokenStream, input: TokenStream) -> TokenStream {
             GenericParam::Type(param) => {
                 let ident = &param.ident;
                 let elem = quote!(#ident);
-                impl_generics.push(quote!(#ident: ?core::marker::Sized));
+                impl_generics.push(quote!(#ident: ?::core::marker::Sized));
                 ty_generics.push(quote!(#ident));
                 phantoms.push(variance::apply(param, elem));
             }
@@ -253,8 +253,8 @@ pub fn phantom(args: TokenStream, input: TokenStream) -> TokenStream {
         #[cfg(not(doc))]
         mod #void_namespace {
             enum #void {}
-            impl core::marker::Copy for #void {}
-            impl core::clone::Clone for #void {
+            impl ::core::marker::Copy for #void {}
+            impl ::core::clone::Clone for #void {
                 fn clone(&self) -> Self {
                     match *self {}
                 }
@@ -263,15 +263,15 @@ pub fn phantom(args: TokenStream, input: TokenStream) -> TokenStream {
             #[allow(non_camel_case_types)]
             #vis_super struct #ident <#(#impl_generics),*> (
                 #(
-                    core::marker::PhantomData<#phantoms>,
+                    ::core::marker::PhantomData<#phantoms>,
                 )*
                 self::#void,
             );
 
-            impl <#(#impl_generics),*> core::marker::Copy
+            impl <#(#impl_generics),*> ::core::marker::Copy
             for #ident <#(#ty_generics),*> {}
 
-            impl <#(#impl_generics),*> core::clone::Clone
+            impl <#(#impl_generics),*> ::core::clone::Clone
             for #ident <#(#ty_generics),*> {
                 fn clone(&self) -> Self {
                     *self

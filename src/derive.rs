@@ -97,7 +97,7 @@ fn expand_copy(input: &UnitStruct) -> TokenStream {
     let (impl_generics, ty_generics, where_clause) = input.generics.split_for_impl();
 
     quote! {
-        impl #impl_generics core::marker::Copy
+        impl #impl_generics ::core::marker::Copy
         for #ident #ty_generics #where_clause {}
     }
 }
@@ -107,7 +107,7 @@ fn expand_clone(input: &UnitStruct) -> TokenStream {
     let (impl_generics, ty_generics, where_clause) = input.generics.split_for_impl();
 
     quote! {
-        impl #impl_generics core::clone::Clone
+        impl #impl_generics ::core::clone::Clone
         for #ident #ty_generics #where_clause {
             #[inline]
             fn clone(&self) -> Self {
@@ -122,7 +122,7 @@ fn expand_default(input: &UnitStruct) -> TokenStream {
     let (impl_generics, ty_generics, where_clause) = input.generics.split_for_impl();
 
     quote! {
-        impl #impl_generics core::default::Default
+        impl #impl_generics ::core::default::Default
         for #ident #ty_generics #where_clause {
             #[inline]
             fn default() -> Self {
@@ -137,10 +137,10 @@ fn expand_hash(input: &UnitStruct) -> TokenStream {
     let (impl_generics, ty_generics, where_clause) = input.generics.split_for_impl();
 
     quote! {
-        impl #impl_generics core::hash::Hash
+        impl #impl_generics ::core::hash::Hash
         for #ident #ty_generics #where_clause {
             #[inline]
-            fn hash<H: core::hash::Hasher>(&self, hasher: &mut H) {
+            fn hash<H: ::core::hash::Hasher>(&self, hasher: &mut H) {
                 let _ = hasher;
             }
         }
@@ -152,12 +152,12 @@ fn expand_partialord(input: &UnitStruct) -> TokenStream {
     let (impl_generics, ty_generics, where_clause) = input.generics.split_for_impl();
 
     quote! {
-        impl #impl_generics core::cmp::PartialOrd
+        impl #impl_generics ::core::cmp::PartialOrd
         for #ident #ty_generics #where_clause {
             #[inline]
-            fn partial_cmp(&self, other: &Self) -> core::option::Option<core::cmp::Ordering> {
+            fn partial_cmp(&self, other: &Self) -> ::core::option::Option<::core::cmp::Ordering> {
                 let _ = other;
-                core::option::Option::Some(core::cmp::Ordering::Equal)
+                ::core::option::Option::Some(::core::cmp::Ordering::Equal)
             }
         }
     }
@@ -168,12 +168,12 @@ fn expand_ord(input: &UnitStruct) -> TokenStream {
     let (impl_generics, ty_generics, where_clause) = input.generics.split_for_impl();
 
     quote! {
-        impl #impl_generics core::cmp::Ord
+        impl #impl_generics ::core::cmp::Ord
         for #ident #ty_generics #where_clause {
             #[inline]
-            fn cmp(&self, other: &Self) -> core::cmp::Ordering {
+            fn cmp(&self, other: &Self) -> ::core::cmp::Ordering {
                 let _ = other;
-                core::cmp::Ordering::Equal
+                ::core::cmp::Ordering::Equal
             }
         }
     }
@@ -184,7 +184,7 @@ fn expand_partialeq(input: &UnitStruct) -> TokenStream {
     let (impl_generics, ty_generics, where_clause) = input.generics.split_for_impl();
 
     quote! {
-        impl #impl_generics core::cmp::PartialEq
+        impl #impl_generics ::core::cmp::PartialEq
         for #ident #ty_generics #where_clause {
             #[inline]
             fn eq(&self, other: &Self) -> bool {
@@ -200,7 +200,7 @@ fn expand_eq(input: &UnitStruct) -> TokenStream {
     let (impl_generics, ty_generics, where_clause) = input.generics.split_for_impl();
 
     quote! {
-        impl #impl_generics core::cmp::Eq
+        impl #impl_generics ::core::cmp::Eq
         for #ident #ty_generics #where_clause {}
     }
 }
@@ -211,10 +211,10 @@ fn expand_debug(input: &UnitStruct) -> TokenStream {
     let string = ident.to_string();
 
     quote! {
-        impl #impl_generics core::fmt::Debug
+        impl #impl_generics ::core::fmt::Debug
         for #ident #ty_generics #where_clause {
-            fn fmt(&self, formatter: &mut core::fmt::Formatter) -> core::fmt::Result {
-                core::fmt::Formatter::write_str(formatter, #string)
+            fn fmt(&self, formatter: &mut ::core::fmt::Formatter) -> ::core::fmt::Result {
+                ::core::fmt::Formatter::write_str(formatter, #string)
             }
         }
     }

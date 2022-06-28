@@ -43,7 +43,7 @@ pub fn apply(param: &mut dyn HasVarianceAttribute, base: TokenStream) -> TokenSt
         })
         .collect();
 
-    let phantom = quote!(core::marker::PhantomData<#base>);
+    let phantom = quote!(::core::marker::PhantomData<#base>);
     match variance {
         Variance::Covariant => base,
         Variance::Contravariant => quote!(fn(#phantom)),
