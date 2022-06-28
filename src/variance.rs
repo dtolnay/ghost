@@ -1,4 +1,4 @@
-use proc_macro2::TokenStream;
+use proc_macro2::{Ident, TokenStream};
 use quote::quote;
 use syn::{Attribute, LifetimeDef, TypeParam};
 
@@ -24,7 +24,11 @@ impl HasVarianceAttribute for LifetimeDef {
     }
 }
 
-pub fn apply(param: &mut dyn HasVarianceAttribute, base: TokenStream) -> TokenStream {
+pub fn apply(
+    param: &mut dyn HasVarianceAttribute,
+    base: TokenStream,
+    type_param: &Ident,
+) -> TokenStream {
     let mut variance = Variance::Covariant;
 
     let attrs = param.attrs();
@@ -43,7 +47,7 @@ pub fn apply(param: &mut dyn HasVarianceAttribute, base: TokenStream) -> TokenSt
         })
         .collect();
 
-    let phantom = quote!(::core::marker::PhantomData<#base>);
+    let phantom = quote!(self::#type_param<#base>);
     match variance {
         Variance::Covariant => base,
         Variance::Contravariant => quote!(fn(#phantom)),

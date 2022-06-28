@@ -211,6 +211,20 @@ pub fn phantom(args: TokenStream, input: TokenStream) -> TokenStream {
         Err(err) => return err.to_compile_error().into(),
     };
 
+    let void = Ident::new(
+        if ident == "Void" { "__Void" } else { "Void" },
+        Span::call_site(),
+    );
+
+    let type_param = Ident::new(
+        if ident == "TypeParam" {
+            "__TypeParam"
+        } else {
+            "TypeParam"
+        },
+        Span::call_site(),
+    );
+
     let mut generics = input.generics;
     let where_clause = generics.where_clause.take();
     let mut impl_generics = Vec::new();
@@ -223,14 +237,14 @@ pub fn phantom(args: TokenStream, input: TokenStream) -> TokenStream {
                 let elem = quote!(#ident);
                 impl_generics.push(quote!(#ident: ?::core::marker::Sized));
                 ty_generics.push(quote!(#ident));
-                phantoms.push(variance::apply(param, elem));
+                phantoms.push(variance::apply(param, elem, &type_param));
             }
             GenericParam::Lifetime(param) => {
                 let lifetime = &param.lifetime;
                 let elem = quote!(&#lifetime ());
                 impl_generics.push(quote!(#lifetime));
                 ty_generics.push(quote!(#lifetime));
-                phantoms.push(variance::apply(param, elem));
+                phantoms.push(variance::apply(param, elem, &type_param));
             }
             GenericParam::Const(param) => {
                 let msg = "const generics are not supported";
@@ -239,11 +253,6 @@ pub fn phantom(args: TokenStream, input: TokenStream) -> TokenStream {
             }
         }
     }
-
-    let void = Ident::new(
-        if ident == "Void" { "__Void" } else { "Void" },
-        Span::call_site(),
-    );
 
     let impl_generics = &impl_generics;
     let ty_generics = &ty_generics;
@@ -261,10 +270,21 @@ pub fn phantom(args: TokenStream, input: TokenStream) -> TokenStream {
                 }
             }
 
+            #[repr(C, packed)]
+            struct #type_param<T: ?::core::marker::Sized>([*const T; 0]);
+            impl<T: ?::core::marker::Sized> ::core::marker::Copy for #type_param<T> {}
+            impl<T: ?::core::marker::Sized> ::core::clone::Clone for #type_param<T> {
+                fn clone(&self) -> Self {
+                    *self
+                }
+            }
+            unsafe impl<T: ?::core::marker::Sized + ::core::marker::Send> ::core::marker::Send for #type_param<T> {}
+            unsafe impl<T: ?::core::marker::Sized + ::core::marker::Sync> ::core::marker::Sync for #type_param<T> {}
+
             #[allow(non_camel_case_types)]
             #vis_super struct #ident <#(#impl_generics),*> (
                 #(
-                    ::core::marker::PhantomData<#phantoms>,
+                    self::#type_param<#phantoms>,
                 )*
                 self::#void,
             );
