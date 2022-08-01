@@ -2,12 +2,12 @@
 name = "ghost"
 version = "0.1.5"
 authors = ["David Tolnay <dtolnay@gmail.com>"]
-license = "MIT OR Apache-2.0"
 description = "Define your own PhantomData"
-repository = "https://github.com/dtolnay/ghost"
 documentation = "https://docs.rs/ghost"
-readme = "README.md"
 edition = "2018"
+license = "MIT OR Apache-2.0"
+readme = "README.md"
+repository = "https://github.com/dtolnay/ghost"
 rust-version = "1.31"
 
 [lib]
