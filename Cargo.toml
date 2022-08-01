@@ -2,6 +2,7 @@
 name = "ghost"
 version = "0.1.5"
 authors = ["David Tolnay <dtolnay@gmail.com>"]
+categories = ["rust-patterns", "no-std"]
 description = "Define your own PhantomData"
 documentation = "https://docs.rs/ghost"
 edition = "2018"
