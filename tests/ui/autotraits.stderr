@@ -10,7 +10,7 @@ note: required for `TypeParam<*const u8>` to implement `Send`
    |
 3  | #[phantom]
    | ^^^^^^^^^^
-note: required because it appears within the type `__void_MyPhantom::MyPhantom<*const u8>`
+note: required because it appears within the type `MyPhantom<*const u8>`
   --> tests/ui/autotraits.rs:4:8
    |
 4  | struct MyPhantom<T: ?Sized>;
@@ -39,7 +39,7 @@ note: required for `TypeParam<*const u8>` to implement `Sync`
    |
 3  | #[phantom]
    | ^^^^^^^^^^
-note: required because it appears within the type `__void_MyPhantom::MyPhantom<*const u8>`
+note: required because it appears within the type `MyPhantom<*const u8>`
   --> tests/ui/autotraits.rs:4:8
    |
 4  | struct MyPhantom<T: ?Sized>;
