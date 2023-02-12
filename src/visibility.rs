@@ -23,10 +23,6 @@ pub fn vis_super(vis: &Visibility) -> Visibility {
             // pub -> pub
             parse_quote!(#vis)
         }
-        Visibility::Crate(vis) => {
-            // crate -> crate
-            parse_quote!(#vis)
-        }
         Visibility::Restricted(vis) => {
             if vis.path.segments[0].ident == "self" {
                 // pub(self) -> pub(in super)

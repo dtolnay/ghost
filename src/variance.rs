@@ -1,6 +1,6 @@
 use proc_macro2::{Ident, TokenStream};
 use quote::quote;
-use syn::{Attribute, LifetimeDef, TypeParam};
+use syn::{Attribute, LifetimeParam, Meta, TypeParam};
 
 enum Variance {
     Covariant,
@@ -18,7 +18,7 @@ impl HasVarianceAttribute for TypeParam {
     }
 }
 
-impl HasVarianceAttribute for LifetimeDef {
+impl HasVarianceAttribute for LifetimeParam {
     fn attrs(&mut self) -> &mut Vec<Attribute> {
         &mut self.attrs
     }
@@ -35,15 +35,16 @@ pub fn apply(
     *attrs = attrs
         .drain(..)
         .filter(|attr| {
-            if attr.path.is_ident("contra") && attr.tokens.is_empty() {
-                variance = Variance::Contravariant;
-                false
-            } else if attr.path.is_ident("invariant") && attr.tokens.is_empty() {
-                variance = Variance::Invariant;
-                false
-            } else {
-                true
+            if let Meta::Path(attr_path) = &attr.meta {
+                if attr_path.is_ident("contra") {
+                    variance = Variance::Contravariant;
+                    return false;
+                } else if attr_path.is_ident("invariant") {
+                    variance = Variance::Invariant;
+                    return false;
+                }
             }
+            true
         })
         .collect();
 

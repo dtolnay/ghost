@@ -1,7 +1,6 @@
 use proc_macro2::TokenStream;
 use quote::quote;
 use syn::parse::{Parse, ParseStream};
-use syn::punctuated::Punctuated;
 use syn::{Attribute, Error, Path, Result, Token};
 
 use crate::parse::UnitStruct;
@@ -24,7 +23,7 @@ struct DeriveList {
 
 impl Parse for DeriveList {
     fn parse(input: ParseStream) -> Result<Self> {
-        let paths: Punctuated<Path, Token![,]> = input.parse_terminated(Path::parse_mod_style)?;
+        let paths = input.parse_terminated(Path::parse_mod_style, Token![,])?;
 
         let mut derives = Vec::new();
         for path in paths {
@@ -63,7 +62,7 @@ pub fn expand<'a>(
     let mut non_derives = Vec::new();
 
     for attr in attrs {
-        if attr.path.is_ident("derive") {
+        if attr.path().is_ident("derive") {
             let list = attr.parse_args_with(DeriveList::parse)?;
             for derive in list.derives {
                 expanded.extend(apply(derive, input));
