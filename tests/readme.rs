@@ -1,3 +1,5 @@
+#![allow(clippy::let_underscore_untyped)]
+
 mod first {
     use ghost::phantom;
 
