@@ -165,7 +165,7 @@
 //! # }
 //! ```
 
-#![doc(html_root_url = "https://docs.rs/ghost/0.1.7")]
+#![doc(html_root_url = "https://docs.rs/ghost/0.1.8")]
 #![allow(
     clippy::doc_markdown,
     // https://github.com/rust-lang/rust-clippy/issues/8538
