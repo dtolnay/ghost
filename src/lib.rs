@@ -268,7 +268,7 @@ pub fn phantom(args: TokenStream, input: TokenStream) -> TokenStream {
             #[allow(clippy::expl_impl_clone_on_copy)]
             impl ::core::clone::Clone for #void {
                 fn clone(&self) -> Self {
-                    match *self {}
+                    *self
                 }
             }
 
