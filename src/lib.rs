@@ -188,7 +188,7 @@ use quote::quote;
 use syn::parse::Nothing;
 use syn::{parse_macro_input, Error, GenericParam, Token};
 
-use crate::parse::UnitStruct;
+use crate::parse::{Kind, PhantomType};
 
 /// Define your own PhantomData and similarly behaved unit types.
 ///
@@ -197,7 +197,7 @@ use crate::parse::UnitStruct;
 #[proc_macro_attribute]
 pub fn phantom(args: TokenStream, input: TokenStream) -> TokenStream {
     parse_macro_input!(args as Nothing);
-    let input = parse_macro_input!(input as UnitStruct);
+    let input = parse_macro_input!(input as PhantomType);
 
     let ident = &input.ident;
     let call_site = Span::call_site();
@@ -257,8 +257,19 @@ pub fn phantom(args: TokenStream, input: TokenStream) -> TokenStream {
 
     let impl_generics = &impl_generics;
     let ty_generics = &ty_generics;
-    let enum_token = Token![enum](input.struct_token.span);
-    let struct_token = input.struct_token;
+    let enum_token = match input.kind {
+        Kind::UnitStruct(struct_token) => Token![enum](struct_token.span),
+        Kind::VoidEnum(enum_token) => enum_token,
+    };
+
+    let original = match input.kind {
+        Kind::UnitStruct(struct_token) => quote! {
+            #vis #struct_token #ident #generics #where_clause;
+        },
+        Kind::VoidEnum(enum_token) => quote! {
+            #vis #enum_token #ident #generics #where_clause {}
+        },
+    };
 
     TokenStream::from(quote! {
         #[cfg(not(doc))]
@@ -322,7 +333,7 @@ pub fn phantom(args: TokenStream, input: TokenStream) -> TokenStream {
 
         #[cfg(doc)]
         #(#attrs)*
-        #vis #struct_token #ident #generics #where_clause;
+        #original
 
         #derives
     })

@@ -1,9 +1,8 @@
+use crate::parse::{Kind, PhantomType};
 use proc_macro2::TokenStream;
 use quote::quote;
 use syn::parse::{Parse, ParseStream};
 use syn::{Attribute, Error, Path, Result, Token};
-
-use crate::parse::UnitStruct;
 
 enum Derive {
     Copy,
@@ -56,7 +55,7 @@ impl Parse for DeriveList {
 
 pub fn expand<'a>(
     attrs: &'a [Attribute],
-    input: &UnitStruct,
+    input: &PhantomType,
 ) -> Result<(TokenStream, Vec<&'a Attribute>)> {
     let mut expanded = TokenStream::new();
     let mut non_derives = Vec::new();
@@ -75,7 +74,7 @@ pub fn expand<'a>(
     Ok((expanded, non_derives))
 }
 
-fn apply(derive: Derive, input: &UnitStruct) -> TokenStream {
+fn apply(derive: Derive, input: &PhantomType) -> TokenStream {
     match derive {
         Derive::Copy => expand_copy(input),
         Derive::Clone => expand_clone(input),
@@ -89,7 +88,7 @@ fn apply(derive: Derive, input: &UnitStruct) -> TokenStream {
     }
 }
 
-fn expand_copy(input: &UnitStruct) -> TokenStream {
+fn expand_copy(input: &PhantomType) -> TokenStream {
     let ident = &input.ident;
     let (impl_generics, ty_generics, where_clause) = input.generics.split_for_impl();
 
@@ -100,9 +99,14 @@ fn expand_copy(input: &UnitStruct) -> TokenStream {
     }
 }
 
-fn expand_clone(input: &UnitStruct) -> TokenStream {
+fn expand_clone(input: &PhantomType) -> TokenStream {
     let ident = &input.ident;
     let (impl_generics, ty_generics, where_clause) = input.generics.split_for_impl();
+
+    let body = match input.kind {
+        Kind::UnitStruct(_) => quote!(#ident),
+        Kind::VoidEnum(_) => quote!(match *self {}),
+    };
 
     quote! {
         #[automatically_derived]
@@ -110,13 +114,13 @@ fn expand_clone(input: &UnitStruct) -> TokenStream {
         for #ident #ty_generics #where_clause {
             #[inline]
             fn clone(&self) -> Self {
-                #ident
+                #body
             }
         }
     }
 }
 
-fn expand_default(input: &UnitStruct) -> TokenStream {
+fn expand_default(input: &PhantomType) -> TokenStream {
     let ident = &input.ident;
     let (impl_generics, ty_generics, where_clause) = input.generics.split_for_impl();
 
@@ -132,7 +136,7 @@ fn expand_default(input: &UnitStruct) -> TokenStream {
     }
 }
 
-fn expand_hash(input: &UnitStruct) -> TokenStream {
+fn expand_hash(input: &PhantomType) -> TokenStream {
     let ident = &input.ident;
     let (impl_generics, ty_generics, where_clause) = input.generics.split_for_impl();
 
@@ -148,7 +152,7 @@ fn expand_hash(input: &UnitStruct) -> TokenStream {
     }
 }
 
-fn expand_partialord(input: &UnitStruct) -> TokenStream {
+fn expand_partialord(input: &PhantomType) -> TokenStream {
     let ident = &input.ident;
     let (impl_generics, ty_generics, where_clause) = input.generics.split_for_impl();
 
@@ -165,7 +169,7 @@ fn expand_partialord(input: &UnitStruct) -> TokenStream {
     }
 }
 
-fn expand_ord(input: &UnitStruct) -> TokenStream {
+fn expand_ord(input: &PhantomType) -> TokenStream {
     let ident = &input.ident;
     let (impl_generics, ty_generics, where_clause) = input.generics.split_for_impl();
 
@@ -182,7 +186,7 @@ fn expand_ord(input: &UnitStruct) -> TokenStream {
     }
 }
 
-fn expand_partialeq(input: &UnitStruct) -> TokenStream {
+fn expand_partialeq(input: &PhantomType) -> TokenStream {
     let ident = &input.ident;
     let (impl_generics, ty_generics, where_clause) = input.generics.split_for_impl();
 
@@ -199,7 +203,7 @@ fn expand_partialeq(input: &UnitStruct) -> TokenStream {
     }
 }
 
-fn expand_eq(input: &UnitStruct) -> TokenStream {
+fn expand_eq(input: &PhantomType) -> TokenStream {
     let ident = &input.ident;
     let (impl_generics, ty_generics, where_clause) = input.generics.split_for_impl();
 
@@ -210,7 +214,7 @@ fn expand_eq(input: &UnitStruct) -> TokenStream {
     }
 }
 
-fn expand_debug(input: &UnitStruct) -> TokenStream {
+fn expand_debug(input: &PhantomType) -> TokenStream {
     let ident = &input.ident;
     let (impl_generics, ty_generics, where_clause) = input.generics.split_for_impl();
     let string = ident.to_string();

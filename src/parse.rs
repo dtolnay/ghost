@@ -1,19 +1,33 @@
-use syn::parse::{Parse, ParseStream, Result};
-use syn::{Attribute, Generics, Ident, Token, Visibility, WhereClause};
+use syn::parse::{Error, Parse, ParseStream, Result};
+use syn::{braced, Attribute, Generics, Ident, Token, Visibility, WhereClause};
 
-pub struct UnitStruct {
+pub struct PhantomType {
     pub attrs: Vec<Attribute>,
     pub vis: Visibility,
-    pub struct_token: Token![struct],
+    pub kind: Kind,
     pub ident: Ident,
     pub generics: Generics,
 }
 
-impl Parse for UnitStruct {
+pub enum Kind {
+    UnitStruct(Token![struct]),
+    VoidEnum(Token![enum]),
+}
+
+impl Parse for PhantomType {
     fn parse(input: ParseStream) -> Result<Self> {
         let attrs = input.call(Attribute::parse_outer)?;
         let vis: Visibility = input.parse()?;
-        let struct_token: Token![struct] = input.parse()?;
+
+        let lookahead = input.lookahead1();
+        let kind = if lookahead.peek(Token![struct]) {
+            input.parse().map(Kind::UnitStruct)?
+        } else if lookahead.peek(Token![enum]) {
+            input.parse().map(Kind::VoidEnum)?
+        } else {
+            return Err(lookahead.error());
+        };
+
         let ident: Ident = input.parse()?;
 
         // Require there to be generics.
@@ -21,12 +35,26 @@ impl Parse for UnitStruct {
         let generics: Generics = input.parse()?;
         let where_clause: Option<WhereClause> = input.parse()?;
 
-        input.parse::<Token![;]>()?;
+        match kind {
+            Kind::UnitStruct(_) => {
+                input.parse::<Token![;]>()?;
+            }
+            Kind::VoidEnum(_) => {
+                let content;
+                let brace_token = braced!(content in input);
+                if !content.is_empty() {
+                    return Err(Error::new(
+                        brace_token.span.join(),
+                        "phantom enum must have 0 variants",
+                    ));
+                }
+            }
+        }
 
-        Ok(UnitStruct {
+        Ok(PhantomType {
             attrs,
             vis,
-            struct_token,
+            kind,
             ident,
             generics: Generics {
                 where_clause,
