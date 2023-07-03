@@ -94,6 +94,7 @@ fn expand_copy(input: &UnitStruct) -> TokenStream {
     let (impl_generics, ty_generics, where_clause) = input.generics.split_for_impl();
 
     quote! {
+        #[automatically_derived]
         impl #impl_generics ::core::marker::Copy
         for #ident #ty_generics #where_clause {}
     }
@@ -104,7 +105,7 @@ fn expand_clone(input: &UnitStruct) -> TokenStream {
     let (impl_generics, ty_generics, where_clause) = input.generics.split_for_impl();
 
     quote! {
-        #[allow(clippy::expl_impl_clone_on_copy, clippy::incorrect_clone_impl_on_copy_type)]
+        #[automatically_derived]
         impl #impl_generics ::core::clone::Clone
         for #ident #ty_generics #where_clause {
             #[inline]
@@ -120,6 +121,7 @@ fn expand_default(input: &UnitStruct) -> TokenStream {
     let (impl_generics, ty_generics, where_clause) = input.generics.split_for_impl();
 
     quote! {
+        #[automatically_derived]
         impl #impl_generics ::core::default::Default
         for #ident #ty_generics #where_clause {
             #[inline]
@@ -135,6 +137,7 @@ fn expand_hash(input: &UnitStruct) -> TokenStream {
     let (impl_generics, ty_generics, where_clause) = input.generics.split_for_impl();
 
     quote! {
+        #[automatically_derived]
         impl #impl_generics ::core::hash::Hash
         for #ident #ty_generics #where_clause {
             #[inline]
@@ -150,6 +153,7 @@ fn expand_partialord(input: &UnitStruct) -> TokenStream {
     let (impl_generics, ty_generics, where_clause) = input.generics.split_for_impl();
 
     quote! {
+        #[automatically_derived]
         impl #impl_generics ::core::cmp::PartialOrd
         for #ident #ty_generics #where_clause {
             #[inline]
@@ -166,6 +170,7 @@ fn expand_ord(input: &UnitStruct) -> TokenStream {
     let (impl_generics, ty_generics, where_clause) = input.generics.split_for_impl();
 
     quote! {
+        #[automatically_derived]
         impl #impl_generics ::core::cmp::Ord
         for #ident #ty_generics #where_clause {
             #[inline]
@@ -182,6 +187,7 @@ fn expand_partialeq(input: &UnitStruct) -> TokenStream {
     let (impl_generics, ty_generics, where_clause) = input.generics.split_for_impl();
 
     quote! {
+        #[automatically_derived]
         impl #impl_generics ::core::cmp::PartialEq
         for #ident #ty_generics #where_clause {
             #[inline]
@@ -198,6 +204,7 @@ fn expand_eq(input: &UnitStruct) -> TokenStream {
     let (impl_generics, ty_generics, where_clause) = input.generics.split_for_impl();
 
     quote! {
+        #[automatically_derived]
         impl #impl_generics ::core::cmp::Eq
         for #ident #ty_generics #where_clause {}
     }
@@ -209,6 +216,7 @@ fn expand_debug(input: &UnitStruct) -> TokenStream {
     let string = ident.to_string();
 
     quote! {
+        #[automatically_derived]
         impl #impl_generics ::core::fmt::Debug
         for #ident #ty_generics #where_clause {
             fn fmt(&self, formatter: &mut ::core::fmt::Formatter) -> ::core::fmt::Result {
