@@ -5,7 +5,6 @@ error[E0277]: `*const u8` cannot be sent between threads safely
    |                    ^^^^^^^^^^^^^^^^^^^^ `*const u8` cannot be sent between threads safely
    |
    = help: the trait `Send` is not implemented for `*const u8`
-   = note: consider using `std::sync::Arc<*const u8>`; for more information visit <https://doc.rust-lang.org/book/ch16-03-shared-state.html>
 note: required for `TypeParam<*const u8>` to implement `Send`
   --> tests/ui/autotraits.rs:3:1
    |
@@ -35,7 +34,6 @@ error[E0277]: `*const u8` cannot be shared between threads safely
    |                    ^^^^^^^^^^^^^^^^^^^^ `*const u8` cannot be shared between threads safely
    |
    = help: the trait `Sync` is not implemented for `*const u8`
-   = note: consider using `std::sync::Arc<*const u8>`; for more information visit <https://doc.rust-lang.org/book/ch16-03-shared-state.html>
 note: required for `TypeParam<*const u8>` to implement `Sync`
   --> tests/ui/autotraits.rs:3:1
    |
