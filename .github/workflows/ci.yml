@@ -35,6 +35,7 @@ jobs:
         run: echo RUSTFLAGS=${RUSTFLAGS}\ -Zrandomize-layout >> $GITHUB_ENV
         if: matrix.rust == 'nightly'
       - run: cargo test
+      - run: cargo doc --package ghost-test-doc
 
   minimal:
     name: Minimal versions
