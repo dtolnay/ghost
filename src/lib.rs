@@ -258,10 +258,8 @@ pub fn phantom(args: TokenStream, input: TokenStream) -> TokenStream {
     let impl_generics = &impl_generics;
     let ty_generics = &ty_generics;
     let enum_token = Token![enum](input.struct_token.span);
-    let struct_token = input.struct_token;
 
     TokenStream::from(quote! {
-        #[cfg(not(doc))]
         mod #void_namespace {
             enum #void {}
             impl ::core::marker::Copy for #void {}
@@ -304,25 +302,18 @@ pub fn phantom(args: TokenStream, input: TokenStream) -> TokenStream {
             }
         }
 
-        #[cfg(not(doc))]
         mod #value_namespace {
             #vis_super use super::#ident::#ident;
         }
 
-        #[cfg(not(doc))]
         #(#attrs)*
         #vis #enum_token #ident #generics #where_clause {
             __Phantom(#void_namespace::#ident <#(#ty_generics),*>),
             #ident,
         }
 
-        #[cfg(not(doc))]
         #[doc(hidden)]
         #vis use self::#value_namespace::*;
-
-        #[cfg(doc)]
-        #(#attrs)*
-        #vis #struct_token #ident #generics #where_clause;
 
         #derives
     })
