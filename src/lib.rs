@@ -352,6 +352,7 @@ pub fn phantom(args: TokenStream, input: TokenStream) -> TokenStream {
         }
 
         mod #value_namespace {
+            #[doc(hidden)]
             #vis_super use super::#ident::#ident;
         }
 
