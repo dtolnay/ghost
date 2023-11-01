@@ -1,6 +1,6 @@
 [package]
 name = "ghost"
-version = "0.1.14"
+version = "0.1.15"
 authors = ["David Tolnay <dtolnay@gmail.com>"]
 categories = ["rust-patterns", "no-std", "no-std::no-alloc"]
 description = "Define your own PhantomData"
