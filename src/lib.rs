@@ -127,6 +127,55 @@
 //! # fn main() {}
 //! ```
 //!
+//! # Documentation
+//!
+//! There are two alternatives for how to handle Rustdoc documentation on
+//! publicly exposed phantom types.
+//!
+//! You may provide documentation directly on the phantom struct in the obvious
+//! way, but Rustdoc will blithely display the somewhat distracting
+//! implementation details of the mechanism emitted by the `#[phantom]` macro.
+//! This way should be preferred if you need to document any public methods, as
+//! methods will not be visible in the other alternative.
+//!
+//! ```
+//! use ghost::phantom;
+//!
+//! /// Documentation.
+//! #[phantom]
+//! pub struct MyPhantom<T: ?Sized>;
+//!
+//! impl<T: ?Sized> MyPhantom<T> {
+//!     /// Documentation on methods.
+//!     pub fn foo() {}
+//! }
+//! #
+//! # fn main() {}
+//! ```
+//!
+//! If you aren't adding methods or don't need methods to be rendered in the
+//! documentation, the recommended idiom is as follows. Rustdoc will show a much
+//! less distracting type signature and all of your trait impls, but will not
+//! show inherent methods.
+//!
+//! ```
+//! mod private {
+//!     use ghost::phantom;
+//!
+//!     #[phantom]
+//!     pub struct MyPhantom<T: ?Sized>;
+//! }
+//!
+//! /// Documentation goes here.
+//! #[allow(type_alias_bounds)]
+//! pub type MyPhantom<T: ?Sized> = private::MyPhantom<T>;
+//!
+//! #[doc(hidden)]
+//! pub use self::private::*;
+//! #
+//! # fn main() {}
+//! ```
+//!
 //! # Use cases
 //!
 //! Entirely up to your imagination. Just to name one, how about a typed
@@ -258,10 +307,8 @@ pub fn phantom(args: TokenStream, input: TokenStream) -> TokenStream {
     let impl_generics = &impl_generics;
     let ty_generics = &ty_generics;
     let enum_token = Token![enum](input.struct_token.span);
-    let struct_token = input.struct_token;
 
     TokenStream::from(quote! {
-        #[cfg(not(doc))]
         mod #void_namespace {
             enum #void {}
             impl ::core::marker::Copy for #void {}
@@ -304,25 +351,18 @@ pub fn phantom(args: TokenStream, input: TokenStream) -> TokenStream {
             }
         }
 
-        #[cfg(not(doc))]
         mod #value_namespace {
             #vis_super use super::#ident::#ident;
         }
 
-        #[cfg(not(doc))]
         #(#attrs)*
         #vis #enum_token #ident #generics #where_clause {
             __Phantom(#void_namespace::#ident <#(#ty_generics),*>),
             #ident,
         }
 
-        #[cfg(not(doc))]
         #[doc(hidden)]
         #vis use self::#value_namespace::*;
-
-        #[cfg(doc)]
-        #(#attrs)*
-        #vis #struct_token #ident #generics #where_clause;
 
         #derives
     })
