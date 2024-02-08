@@ -15,6 +15,7 @@ mod first {
 
     // Proof that MyPhantom is not just a re-export of PhantomData.
     // If it were a re-export, these would be conflicting impls.
+    #[allow(dead_code)]
     trait Trait {}
     impl<T> Trait for std::marker::PhantomData<T> {}
     impl<T> Trait for MyPhantom<T> {}
