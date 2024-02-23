@@ -1,4 +1,10 @@
 ## Define your own PhantomData
+# https://tea.xyz/what-is-this-file
+---
+version: 1.0.0
+codeOwners:
+  - '0x8fF370dc6d6Bf42C25562E9d842c914d411E4109'
+quorum: 1
 
 [<img alt="github" src="https://img.shields.io/badge/github-dtolnay/ghost-8da0cb?style=for-the-badge&labelColor=555555&logo=github" height="20">](https://github.com/dtolnay/ghost)
 [<img alt="crates.io" src="https://img.shields.io/crates/v/ghost.svg?style=for-the-badge&color=fc8d62&logo=rust" height="20">](https://crates.io/crates/ghost)
