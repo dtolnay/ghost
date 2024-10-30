@@ -4,7 +4,7 @@ error[E0277]: `*const u8` cannot be sent between threads safely
 15 |     require_send::<MyPhantom<*const u8>>();
    |                    ^^^^^^^^^^^^^^^^^^^^ `*const u8` cannot be sent between threads safely
    |
-   = help: the trait `Send` is not implemented for `*const u8`, which is required by `MyPhantom<*const u8>: Send`
+   = help: the trait `Send` is not implemented for `*const u8`
 note: required for `TypeParam<*const u8>` to implement `Send`
   --> tests/ui/autotraits.rs:3:1
    |
@@ -33,7 +33,7 @@ error[E0277]: `*const u8` cannot be shared between threads safely
 16 |     require_sync::<MyPhantom<*const u8>>();
    |                    ^^^^^^^^^^^^^^^^^^^^ `*const u8` cannot be shared between threads safely
    |
-   = help: the trait `Sync` is not implemented for `*const u8`, which is required by `MyPhantom<*const u8>: Sync`
+   = help: the trait `Sync` is not implemented for `*const u8`
 note: required for `TypeParam<*const u8>` to implement `Sync`
   --> tests/ui/autotraits.rs:3:1
    |
