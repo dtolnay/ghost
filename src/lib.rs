@@ -311,7 +311,9 @@ pub fn phantom(args: TokenStream, input: TokenStream) -> TokenStream {
     TokenStream::from(quote! {
         mod #void_namespace {
             enum #void {}
+            #[automatically_derived]
             impl ::core::marker::Copy for #void {}
+            #[automatically_derived]
             #[allow(clippy::expl_impl_clone_on_copy)]
             impl ::core::clone::Clone for #void {
                 fn clone(&self) -> Self {
@@ -321,14 +323,18 @@ pub fn phantom(args: TokenStream, input: TokenStream) -> TokenStream {
 
             #[repr(C, packed)]
             struct #type_param<T: ?::core::marker::Sized>([*const T; 0]);
+            #[automatically_derived]
             impl<T: ?::core::marker::Sized> ::core::marker::Copy for #type_param<T> {}
+            #[automatically_derived]
             #[allow(clippy::expl_impl_clone_on_copy)]
             impl<T: ?::core::marker::Sized> ::core::clone::Clone for #type_param<T> {
                 fn clone(&self) -> Self {
                     *self
                 }
             }
+            #[automatically_derived]
             unsafe impl<T: ?::core::marker::Sized + ::core::marker::Send> ::core::marker::Send for #type_param<T> {}
+            #[automatically_derived]
             unsafe impl<T: ?::core::marker::Sized + ::core::marker::Sync> ::core::marker::Sync for #type_param<T> {}
 
             #[allow(non_camel_case_types)]
@@ -339,9 +345,11 @@ pub fn phantom(args: TokenStream, input: TokenStream) -> TokenStream {
                 self::#void,
             );
 
+            #[automatically_derived]
             impl <#(#impl_generics),*> ::core::marker::Copy
             for #ident <#(#ty_generics),*> {}
 
+            #[automatically_derived]
             #[allow(clippy::expl_impl_clone_on_copy)]
             impl <#(#impl_generics),*> ::core::clone::Clone
             for #ident <#(#ty_generics),*> {
