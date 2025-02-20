@@ -14,7 +14,7 @@
 //! the same type is impossible to define in ordinary Rust code. It is defined
 //! in the standard library like this:
 //!
-//! [`PhantomData`]: https://doc.rust-lang.org/std/marker/struct.PhantomData.html
+//! [`PhantomData`]: core::marker::PhantomData
 //!
 //! ```
 //! # const IGNORE: &str = stringify! {
