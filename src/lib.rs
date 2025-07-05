@@ -235,7 +235,7 @@ use proc_macro::TokenStream;
 use proc_macro2::{Ident, Span};
 use quote::quote;
 use syn::parse::Nothing;
-use syn::{parse_macro_input, Error, GenericParam, Token};
+use syn::{parse_macro_input, GenericParam, Token};
 
 use crate::parse::UnitStruct;
 
@@ -296,11 +296,7 @@ pub fn phantom(args: TokenStream, input: TokenStream) -> TokenStream {
                 ty_generics.push(quote!(#lifetime));
                 phantoms.push(variance::apply(param, elem, &type_param));
             }
-            GenericParam::Const(param) => {
-                let msg = "const generics are not supported";
-                let err = Error::new_spanned(param, msg);
-                return err.to_compile_error().into();
-            }
+            GenericParam::Const(_) => {}
         }
     }
 
