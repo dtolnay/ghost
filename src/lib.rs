@@ -52,6 +52,9 @@
 //! # Examples
 //!
 //! ```
+//! # #![feature(generic_const_items)]
+//! # #![allow(incomplete_features)]
+//! #
 //! use ghost::phantom;
 //!
 //! #[phantom]
@@ -79,6 +82,9 @@
 //! everything at once:
 //!
 //! ```
+//! # #![feature(generic_const_items)]
+//! # #![allow(incomplete_features)]
+//! #
 //! use ghost::phantom;
 //!
 //! #[phantom]
@@ -109,6 +115,9 @@
 //! [Subtyping chapter]: https://doc.rust-lang.org/nomicon/subtyping.html
 //!
 //! ```
+//! # #![feature(generic_const_items)]
+//! # #![allow(incomplete_features)]
+//! #
 //! use ghost::phantom;
 //!
 //! #[phantom]
@@ -139,6 +148,9 @@
 //! methods will not be visible in the other alternative.
 //!
 //! ```
+//! # #![feature(generic_const_items)]
+//! # #![allow(incomplete_features)]
+//! #
 //! use ghost::phantom;
 //!
 //! /// Documentation.
@@ -159,6 +171,9 @@
 //! show inherent methods.
 //!
 //! ```
+//! # #![feature(generic_const_items)]
+//! # #![allow(incomplete_features)]
+//! #
 //! mod private {
 //!     use ghost::phantom;
 //!
@@ -183,6 +198,9 @@
 //! registered of a particular type:
 //!
 //! ```no_run
+//! # #![feature(generic_const_items)]
+//! # #![allow(incomplete_features)]
+//! #
 //! # use ghost::phantom;
 //! #
 //! # #[phantom]
@@ -251,7 +269,6 @@ pub fn phantom(args: TokenStream, input: TokenStream) -> TokenStream {
     let ident = &input.ident;
     let call_site = Span::call_site();
     let void_namespace = Ident::new(&format!("__void_{}", ident), call_site);
-    let value_namespace = Ident::new(&format!("__value_{}", ident), call_site);
 
     let vis = &input.vis;
     let vis_super = visibility::vis_super(vis);
@@ -276,7 +293,6 @@ pub fn phantom(args: TokenStream, input: TokenStream) -> TokenStream {
     );
 
     let mut generics = input.generics;
-    let where_clause = generics.where_clause.take();
     let mut impl_generics = Vec::new();
     let mut ty_generics = Vec::new();
     let mut phantoms = Vec::new();
@@ -302,6 +318,7 @@ pub fn phantom(args: TokenStream, input: TokenStream) -> TokenStream {
 
     let impl_generics = &impl_generics;
     let ty_generics = &ty_generics;
+    let (_, ty_generics_with_const, where_clause) = generics.split_for_impl();
     let enum_token = Token![enum](input.struct_token.span);
 
     TokenStream::from(quote! {
@@ -355,11 +372,6 @@ pub fn phantom(args: TokenStream, input: TokenStream) -> TokenStream {
             }
         }
 
-        mod #value_namespace {
-            #[doc(hidden)]
-            #vis_super use super::#ident::#ident;
-        }
-
         #(#attrs)*
         #vis #enum_token #ident #generics #where_clause {
             __Phantom(#void_namespace::#ident <#(#ty_generics),*>),
@@ -367,7 +379,8 @@ pub fn phantom(args: TokenStream, input: TokenStream) -> TokenStream {
         }
 
         #[doc(hidden)]
-        #vis use self::#value_namespace::*;
+        #[allow(non_upper_case_globals)]
+        #vis const #ident #generics: #ident #ty_generics_with_const = #ident::#ident #where_clause;
 
         #derives
     })

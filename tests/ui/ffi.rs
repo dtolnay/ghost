@@ -1,3 +1,5 @@
+#![feature(generic_const_items)]
+#![allow(incomplete_features)]
 #![deny(improper_ctypes_definitions)]
 
 use ghost::phantom;

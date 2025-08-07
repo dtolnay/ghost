@@ -1,3 +1,5 @@
+#![feature(generic_const_items)]
+#![allow(incomplete_features)]
 #![allow(clippy::no_effect_underscore_binding)]
 
 use ghost::phantom;

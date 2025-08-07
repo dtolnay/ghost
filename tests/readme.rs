@@ -1,3 +1,5 @@
+#![feature(generic_const_items)]
+#![allow(incomplete_features)]
 #![allow(clippy::let_underscore_untyped)]
 
 mod first {
