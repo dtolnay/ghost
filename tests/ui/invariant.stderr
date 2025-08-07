@@ -6,8 +6,8 @@ error: lifetime may not live long enough
 7 |     phantom
   |     ^^^^^^^ returning this value requires that `'a` must outlive `'static`
   |
-  = note: requirement occurs because of the type `InvariantPhantom<&str>`, which makes the generic argument `&str` invariant
-  = note: the enum `InvariantPhantom<T>` is invariant over the parameter `T`
+  = note: requirement occurs because of the type `InvariantPhantom__Phantom<&str>`, which makes the generic argument `&str` invariant
+  = note: the enum `InvariantPhantom__Phantom<T>` is invariant over the parameter `T`
   = help: see <https://doc.rust-lang.org/nomicon/subtyping.html> for more information about variance
 
 error: lifetime may not live long enough
@@ -18,6 +18,6 @@ error: lifetime may not live long enough
 11 |     phantom
    |     ^^^^^^^ returning this value requires that `'a` must outlive `'static`
    |
-   = note: requirement occurs because of the type `InvariantPhantom<&str>`, which makes the generic argument `&str` invariant
-   = note: the enum `InvariantPhantom<T>` is invariant over the parameter `T`
+   = note: requirement occurs because of the type `InvariantPhantom__Phantom<&str>`, which makes the generic argument `&str` invariant
+   = note: the enum `InvariantPhantom__Phantom<T>` is invariant over the parameter `T`
    = help: see <https://doc.rust-lang.org/nomicon/subtyping.html> for more information about variance

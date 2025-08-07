@@ -15,7 +15,7 @@ note: required because it appears within the type `__void_MyPhantom::MyPhantom<*
    |
  4 | struct MyPhantom<T: ?Sized>;
    |        ^^^^^^^^^
-note: required because it appears within the type `MyPhantom<*const u8>`
+note: required because it appears within the type `MyPhantom__Phantom<*const u8>`
   --> tests/ui/autotraits.rs:4:8
    |
  4 | struct MyPhantom<T: ?Sized>;
@@ -44,7 +44,7 @@ note: required because it appears within the type `__void_MyPhantom::MyPhantom<*
    |
  4 | struct MyPhantom<T: ?Sized>;
    |        ^^^^^^^^^
-note: required because it appears within the type `MyPhantom<*const u8>`
+note: required because it appears within the type `MyPhantom__Phantom<*const u8>`
   --> tests/ui/autotraits.rs:4:8
    |
  4 | struct MyPhantom<T: ?Sized>;
