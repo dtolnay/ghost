@@ -251,7 +251,7 @@ pub fn phantom(args: TokenStream, input: TokenStream) -> TokenStream {
     let ident = &input.ident;
     let call_site = Span::call_site();
     let void_namespace = Ident::new(&format!("__void_{}", ident), call_site);
-    let value_namespace = Ident::new(&format!("__value_{}", ident), call_site);
+    let fake_ident = Ident::new(&format!("{}__Phantom", ident), ident.span());
 
     let vis = &input.vis;
     let vis_super = visibility::vis_super(vis);
@@ -296,7 +296,11 @@ pub fn phantom(args: TokenStream, input: TokenStream) -> TokenStream {
                 ty_generics.push(quote!(#lifetime));
                 phantoms.push(variance::apply(param, elem, &type_param));
             }
-            GenericParam::Const(_) => {}
+            GenericParam::Const(param) => {
+                let ident = &param.ident;
+                impl_generics.push(quote!(#param));
+                ty_generics.push(quote!(#ident));
+            }
         }
     }
 
@@ -355,19 +359,19 @@ pub fn phantom(args: TokenStream, input: TokenStream) -> TokenStream {
             }
         }
 
-        mod #value_namespace {
-            #[doc(hidden)]
-            #vis_super use super::#ident::#ident;
-        }
-
+        #[doc(hidden)]
+        #[allow(non_camel_case_types)]
         #(#attrs)*
-        #vis #enum_token #ident #generics #where_clause {
+        #vis #enum_token #fake_ident #generics #where_clause {
             __Phantom(#void_namespace::#ident <#(#ty_generics),*>),
             #ident,
         }
 
         #[doc(hidden)]
-        #vis use self::#value_namespace::*;
+        #vis use #fake_ident::*;
+
+        #[allow(unused_imports, type_alias_bounds)]
+        #vis type #ident #generics #where_clause = #fake_ident <#(#ty_generics),*>;
 
         #derives
     })
