@@ -221,7 +221,8 @@
     clippy::iter_with_drain,
     clippy::needless_doctest_main,
     clippy::needless_pass_by_value,
-    clippy::too_many_lines
+    clippy::too_many_lines,
+    clippy::uninlined_format_args
 )]
 
 extern crate proc_macro;

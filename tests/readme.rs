@@ -1,4 +1,4 @@
-#![allow(clippy::let_underscore_untyped)]
+#![allow(clippy::let_underscore_untyped, clippy::uninlined_format_args)]
 
 mod first {
     use ghost::phantom;
