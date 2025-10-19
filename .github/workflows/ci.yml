@@ -24,7 +24,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        rust: [nightly, beta, stable, 1.76.0, 1.61.0]
+        rust: [nightly, beta, stable, 1.76.0, 1.68.0]
     timeout-minutes: 45
     steps:
       - uses: actions/checkout@v5
@@ -35,7 +35,7 @@ jobs:
         run: echo RUSTFLAGS=${RUSTFLAGS}\ -Zrandomize-layout >> $GITHUB_ENV
         if: matrix.rust == 'nightly'
       - run: cargo test
-        if: matrix.rust != '1.61.0'
+        if: matrix.rust != '1.68.0'
       - run: cargo doc --package ghost-test-doc
       - uses: actions/upload-artifact@v4
         if: matrix.rust == 'nightly' && always()
