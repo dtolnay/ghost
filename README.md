@@ -14,8 +14,6 @@ Rust.
 ghost = "0.1"
 ```
 
-*Supports rustc 1.31+*
-
 ### Background
 
 [`PhantomData`] as defined by the Rust standard library is magical in that the
