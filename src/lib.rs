@@ -318,7 +318,7 @@ pub fn phantom(args: TokenStream, input: TokenStream) -> TokenStream {
                 }
             }
 
-            #[repr(packed)]
+            #[repr(Rust, packed)]
             struct #type_param<T: ?::core::marker::Sized>([*const T; 0]);
             #[automatically_derived]
             impl<T: ?::core::marker::Sized> ::core::marker::Copy for #type_param<T> {}
